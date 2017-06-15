@@ -23,6 +23,8 @@ class cmd_cyclepreview(lxu.command.BasicCommand):
         lxu.command.BasicCommand.__init__(self)
         self.dyna_Add('inPreviewMode', lx.symbol.sTYPE_BOOLEAN)
 
+        self.viewSvc = lx.service.View3Dport()
+
     def cmd_Flags(self):
         return lx.symbol.fCMD_MODEL | lx.symbol.fCMD_UNDO
 
@@ -32,11 +34,25 @@ class cmd_cyclepreview(lxu.command.BasicCommand):
     def cmd_Interact(self):
         pass
 
+    def get_current_view(self):
+        viewSvc = lx.service.View3Dport()
+
+        currentView = lx.object.View3D(viewSvc.View(viewSvc.Current()))
+        print currentView.Matrix(0)
+        print currentView.Angles()
+        print currentView.Axis()
+        print currentView.EyeVector()
+        print currentView.WorkPlane()
+
     def togglePreview(self):
         if self.dyna_Bool(0):
-            lx.eval('viewport.restore base.Tilapiatsu3DView false 3Dmodel')
+            lx.eval('viewport.restore base.TilaTmp3DView false vptab')
+            lx.eval('viewport.delete TilaTmp3DView')
             
         else:
+            currentView = lx.object.View3D(self.viewSvc.View(self.viewSvc.Current()))
+            print currentView.Matrix(0)
+            lx.eval('!!viewport.save TilaTmp3DView vpapplication')
             lx.eval('viewport.restore {} false primitive')
             lx.eval('iview.resume')
 
