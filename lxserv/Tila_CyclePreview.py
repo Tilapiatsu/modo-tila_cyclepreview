@@ -46,6 +46,4 @@ class cmd_cyclepreview(lxu.command.BasicCommand):
     def cmd_Query(self, index, vaQuery):
         lx.notimpl()
 
-
 lx.bless(cmd_cyclepreview, c.TILA_CYCLEPREVIEW)
-
