@@ -76,11 +76,12 @@ class cyclepreview():
 		# lx.eval('item.channel camera$target %s' % cameraView['target'])
 		# lx.eval('item.channel camera$focalLen %s' % cameraView['focal'])
 
-		lx.eval('item.channel camera$dof %s' % cameraView['dof'])
-		lx.eval('item.channel camera$focusDist %s' % cameraView['focus'])
-		lx.eval('item.channel camera$irisBlades %s' % cameraView['irisBlades'])
-		lx.eval('item.channel camera$irisRot %s' % cameraView['irisRot'])
-		lx.eval('item.channel camera$irisBias %s' % cameraView['edgeWeight'])
+		if cameraView['dof']:
+			lx.eval('item.channel camera$dof %s' % cameraView['dof'])
+			lx.eval('item.channel camera$focusDist %s' % cameraView['focus'])
+			lx.eval('item.channel camera$irisBlades %s' % cameraView['irisBlades'])
+			lx.eval('item.channel camera$irisRot %s' % cameraView['irisRot'])
+			lx.eval('item.channel camera$irisBias %s' % cameraView['edgeWeight'])
 
 		lx.eval('item.channel camera$motionBlur %s' % cameraView['motionBlur'])
 		if cameraView['motionBlur']:
@@ -92,11 +93,15 @@ class cyclepreview():
 
 	def togglePreview(self):
 		if self.inPreviewMode:
-			lx.eval('viewport.restore base.TilaTmp3DView false 3Dmodel')
-			lx.eval('viewport.delete TilaTmp3DView')
+			try:
+				lx.eval('!!viewport.restore base.TilaTmp3DView false 3Dmodel')
+				lx.eval('viewport.delete TilaTmp3DView')
 
-			self.scn.select(self.renderCamera)	
-			lx.eval('delete')
+				self.scn.select(self.renderCamera)	
+				lx.eval('delete')
+			except:
+				lx.eval('viewport.restore base.Tilapiatsu3DView false 3Dmodel')
+
 			
 		else:
 			# currentView = lx.object.View3D(self.viewSvc.View(self.viewSvc.Current()))
