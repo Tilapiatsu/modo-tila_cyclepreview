@@ -114,7 +114,10 @@ class cyclepreview():
 				lx.eval('viewport.delete TilaTmp3DView')
 
 				self.scn.select(self.renderCamera)
-				self.scn.select(t.TILA_DEFAULTCAMNAME, add=True)
+				try:
+					self.scn.select(t.TILA_DEFAULTCAMNAME, add=True)
+				except:
+					pass
 				lx.eval('delete')
 			except:
 				lx.eval('viewport.restore base.Tilapiatsu3DView false 3Dmodel')
