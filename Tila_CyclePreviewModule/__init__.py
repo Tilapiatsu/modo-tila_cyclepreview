@@ -3,3 +3,4 @@
 import lx
 
 TILA_CYCLEPREVIEW = "tila.cyclePreview"
+TILA_DEFAULTCAMNAME = 'newDefaultTilaCamera'

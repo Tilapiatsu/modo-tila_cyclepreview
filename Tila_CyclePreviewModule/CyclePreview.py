@@ -1,15 +1,31 @@
 import lx
 import modo
+import Tila_CyclePreviewModule as t
 
 class cyclepreview():
+	newCam = None
 
 	def __init__(self, inPreviewMode):
 		self.viewSvc = lx.service.View3Dport()
 		self.inPreviewMode = inPreviewMode
-		self.renderCamera = modo.Item(lx.eval('render.camera ?'))
 		self.scn = modo.Scene()
 		self.currScn = modo.scene.current()
 		self.tmpCameraView = {}
+		self.renderCamera = self.getCamera()
+
+
+	def getCamera(self):
+		try:
+			renderCamera = modo.Item(lx.eval('render.camera ?'))
+			return renderCamera
+		except:
+			try:
+				sceneCamera = self.scn.items('camera')
+				return sceneCamera[0]
+			except:
+				cyclepreview.newCam = self.scn.addCamera(t.TILA_DEFAULTCAMNAME)
+				return cyclepreview.newCam
+
 
 	def print_current_view(self):
 		currentView = lx.object.View3D(self.viewSvc.View(self.viewSvc.Current()))
@@ -97,7 +113,8 @@ class cyclepreview():
 				lx.eval('!!viewport.restore base.TilaTmp3DView false 3Dmodel')
 				lx.eval('viewport.delete TilaTmp3DView')
 
-				self.scn.select(self.renderCamera)	
+				self.scn.select(self.renderCamera)
+				self.scn.select(t.TILA_DEFAULTCAMNAME, add=True)
 				lx.eval('delete')
 			except:
 				lx.eval('viewport.restore base.Tilapiatsu3DView false 3Dmodel')
